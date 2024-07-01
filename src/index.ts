@@ -1,13 +1,16 @@
 import fs from "fs"
 import readline from "readline"
+import mongo, { MongoClient } from "mongodb"
 
 const secretsFilePath = "./secrets.json"
 let secrets;
+let mongoClient: MongoClient
 
 main()
 
 async function main() {
     await ResolveSecrets()
+    await ConnectDatabase()
 }
 
 async function ResolveSecrets() {
@@ -34,6 +37,11 @@ async function ResolveSecrets() {
     }
 
     console.log("Resolved secrets.")
+}
+
+async function ConnectDatabase() {
+    mongoClient = new MongoClient(secrets.mongoURI)
+    await mongoClient.connect();
 }
 
 function prompt(query) {
