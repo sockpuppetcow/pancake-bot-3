@@ -1,16 +1,19 @@
 import fs from "fs"
 import readline from "readline"
-import mongo, { MongoClient } from "mongodb"
+import { MongoClient } from "mongodb"
+import { Client as DiscordClient, Events as DiscordEvents, GatewayIntentBits as DiscordGatewayIntentBits} from "discord.js"
 
 const secretsFilePath = "./secrets.json"
 let secrets;
 let mongoClient: MongoClient
+let discordClient: DiscordClient
 
 main()
 
 async function main() {
     await ResolveSecrets()
     await ConnectDatabase()
+    await ConnectDiscord()
 }
 
 async function ResolveSecrets() {
@@ -42,6 +45,15 @@ async function ResolveSecrets() {
 async function ConnectDatabase() {
     mongoClient = new MongoClient(secrets.mongoURI)
     await mongoClient.connect();
+}
+
+async function ConnectDiscord() {
+    discordClient = new DiscordClient({ intents: [DiscordGatewayIntentBits.Guilds] })
+    discordClient.once(DiscordEvents.ClientReady, r => {
+        console.log("Connected to Discord")
+    })
+
+    discordClient.login(secrets.botToken)
 }
 
 function prompt(query) {
