@@ -23,17 +23,17 @@ async function main() {
 }
 
 async function ResolveSecrets() {
-    let rsecrets
+    let rsecrets: Secrets
     secrets = {
-        botToken: "",
-        mongoURI: ""
+        botToken: undefined,
+        mongoURI: undefined
     }
 
     console.log("Attempting to read secrets file")
     if (fs.existsSync(secretsFilePath)) {
         const read = fs.readFileSync(secretsFilePath, 'utf-8')
         rsecrets = JSON.parse(read)
-        secrets = rsecrets
+        secrets = {...rsecrets}
     }
     
     if (secrets.botToken == undefined) {
