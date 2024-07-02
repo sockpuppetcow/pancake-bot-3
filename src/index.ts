@@ -4,7 +4,13 @@ import { MongoClient } from "mongodb"
 import { Client as DiscordClient, Events as DiscordEvents, GatewayIntentBits as DiscordGatewayIntentBits} from "discord.js"
 
 const secretsFilePath = "./secrets.json"
-let secrets;
+
+interface Secrets {
+    botToken: string,
+    mongoURI: string
+}
+let secrets: Secrets
+
 let mongoClient: MongoClient
 let discordClient: DiscordClient
 
@@ -18,7 +24,10 @@ async function main() {
 
 async function ResolveSecrets() {
     let rsecrets
-    secrets = {}
+    secrets = {
+        botToken: "",
+        mongoURI: ""
+    }
 
     console.log("Attempting to read secrets file")
     if (fs.existsSync(secretsFilePath)) {
@@ -56,13 +65,13 @@ async function ConnectDiscord() {
     discordClient.login(secrets.botToken)
 }
 
-function prompt(query) {
+function prompt(query): Promise<string> {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     })
 
-    return new Promise(resolve => rl.question(query, ans => {
+    return new Promise<string>(resolve => rl.question(query, ans => {
         rl.close();
         resolve(ans)
     }))
