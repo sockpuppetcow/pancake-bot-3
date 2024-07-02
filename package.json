@@ -8,12 +8,15 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "prepare": "npm run build",
+    "check": "npx @biomejs/biome check ./src/",
+    "fix": "npx @biomejs/biome check --write ./src/",
     "dev": "node --import=tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@types/node": "^20.14.9",
     "tsx": "^4.16.0",
     "typescript": "^5.5.2"
