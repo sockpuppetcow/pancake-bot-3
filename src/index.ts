@@ -7,6 +7,8 @@ import {
 } from "discord.js"
 import { MongoClient } from "mongodb"
 
+import {Logger} from "./logger"
+
 const secretsFilePath = "./secrets.json"
 
 interface Secrets {
@@ -17,13 +19,21 @@ let secrets: Secrets
 
 let mongoClient: MongoClient
 let discordClient: DiscordClient
+let logger: Logger
 
 main()
 
 async function main() {
+    await AttachLogger()
     await ResolveSecrets()
     await ConnectDatabase()
     await ConnectDiscord()
+}
+
+async function AttachLogger() {
+    //TODO: After config is available, get logger configs and actually make this function important
+
+    logger = new Logger("./log.log")
 }
 
 async function ResolveSecrets() {
@@ -33,7 +43,7 @@ async function ResolveSecrets() {
         mongoURI: undefined
     }
 
-    console.log("Attempting to read secrets file")
+    logger.Log("Attempting to read secrets file")
     if (fs.existsSync(secretsFilePath)) {
         const read = fs.readFileSync(secretsFilePath, "utf-8")
         rsecrets = JSON.parse(read)
@@ -52,7 +62,7 @@ async function ResolveSecrets() {
         fs.writeFileSync(secretsFilePath, JSON.stringify(secrets))
     }
 
-    console.log("Resolved secrets.")
+    logger.Log("Resolved secrets.")
 }
 
 async function ConnectDatabase() {
@@ -66,7 +76,7 @@ async function ConnectDiscord() {
     })
 
     discordClient.once(DiscordEvents.ClientReady, (r) => {
-        console.log("Connected to Discord")
+        logger.Log("Connected to Discord")
     })
 
     discordClient.login(secrets.botToken)
