@@ -19,7 +19,7 @@
     "@biomejs/biome": "1.8.3",
     "@types/node": "^20.14.9",
     "tsx": "^4.16.0",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
     "discord.js": "^14.15.3",

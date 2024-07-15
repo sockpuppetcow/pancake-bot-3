@@ -1,13 +1,13 @@
 import fs from "node:fs"
 import readline from "node:readline"
-import {
+/*import {
     Client as DiscordClient,
     Events as DiscordEvents,
     GatewayIntentBits as DiscordGatewayIntentBits
-} from "discord.js"
+} from "discord.js"*/
 import { MongoClient } from "mongodb"
 
-import {Logger} from "./logger"
+import { Logger } from "./logger"
 
 const secretsFilePath = "./secrets.json"
 
@@ -18,7 +18,7 @@ interface Secrets {
 let secrets: Secrets
 
 let mongoClient: MongoClient
-let discordClient: DiscordClient
+//let discordClient: DiscordClient
 let logger: Logger
 
 main()
@@ -27,7 +27,7 @@ async function main() {
     await AttachLogger()
     await ResolveSecrets()
     await ConnectDatabase()
-    await ConnectDiscord()
+    //await ConnectDiscord()
 }
 
 async function AttachLogger() {
@@ -70,7 +70,7 @@ async function ConnectDatabase() {
     await mongoClient.connect()
 }
 
-async function ConnectDiscord() {
+/*async function ConnectDiscord() {
     discordClient = new DiscordClient({
         intents: [DiscordGatewayIntentBits.Guilds]
     })
@@ -80,7 +80,7 @@ async function ConnectDiscord() {
     })
 
     discordClient.login(secrets.botToken)
-}
+}*/
 
 function prompt(query): Promise<string> {
     const rl = readline.createInterface({
