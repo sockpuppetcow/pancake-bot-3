@@ -8,34 +8,36 @@ export enum LogLevel {
 }
 
 export class Logger {
-    
-
-    logfile:string
-    constructor(filepath:string) {
+    logfile: string
+    constructor(filepath: string) {
         this.logfile = filepath
     }
 
-    Log(data:string, logLevel = LogLevel.Normal, logToConsole = true, logToFile = true) {
+    Log(
+        data: string,
+        logLevel = LogLevel.Normal,
+        logToConsole = true,
+        logToFile = true
+    ) {
         let pre = `[${Date.now()}]`
 
         switch (logLevel) {
-            case (LogLevel.Normal): {
-
+            case LogLevel.Normal: {
                 break
             }
-            case (LogLevel.Debug): {
+            case LogLevel.Debug: {
                 pre += "[DEBUG]"
                 break
             }
-            case (LogLevel.Warn): {
+            case LogLevel.Warn: {
                 pre += "[WARN]"
                 break
             }
-            case (LogLevel.Error): {
+            case LogLevel.Error: {
                 pre += "[ERROR]"
             }
         }
-        
+
         const out = `${pre} ${data} \n`
 
         if (logToConsole) {

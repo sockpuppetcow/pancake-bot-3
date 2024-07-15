@@ -1,10 +1,9 @@
 import fs from "node:fs"
-import readline from "node:readline"
-/*import {
+import {
     Client as DiscordClient,
     Events as DiscordEvents,
     GatewayIntentBits as DiscordGatewayIntentBits
-} from "discord.js"*/
+} from "discord.js"
 import { MongoClient } from "mongodb"
 
 import { Logger } from "./logger"
@@ -18,7 +17,7 @@ interface Secrets {
 let secrets: Secrets
 
 let mongoClient: MongoClient
-//let discordClient: DiscordClient
+let discordClient: DiscordClient
 let logger: Logger
 
 main()
@@ -27,7 +26,7 @@ async function main() {
     await AttachLogger()
     await ResolveSecrets()
     await ConnectDatabase()
-    //await ConnectDiscord()
+    await ConnectDiscord()
 }
 
 async function AttachLogger() {
@@ -70,7 +69,7 @@ async function ConnectDatabase() {
     await mongoClient.connect()
 }
 
-/*async function ConnectDiscord() {
+async function ConnectDiscord() {
     discordClient = new DiscordClient({
         intents: [DiscordGatewayIntentBits.Guilds]
     })
@@ -80,18 +79,19 @@ async function ConnectDatabase() {
     })
 
     discordClient.login(secrets.botToken)
-}*/
+}
 
-function prompt(query): Promise<string> {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    })
+async function prompt(query): Promise<string> {
+    console.log(query)
 
-    return new Promise<string>((resolve) =>
-        rl.question(query, (ans) => {
-            rl.close()
-            resolve(ans)
+    const stdin = process.stdin
+    stdin.setEncoding("utf-8")
+
+    return new Promise<string>((resolve) => {
+        stdin.resume()
+        stdin.once("data", (data) => {
+            const chunk = data.toString().trim()
+            resolve(chunk)
         })
-    )
+    })
 }
